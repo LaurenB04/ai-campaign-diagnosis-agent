@@ -24,12 +24,15 @@ if st.button("Diagnose Campaign"):
         client = anthropic.Anthropic(api_key=api_key)
 
         response = client.messages.create(
-            model="claude-3-5-haiku-latest",
-            max_tokens=500,
-            messages=[
+    model="claude-3-5-haiku-latest",
+    max_tokens=500,
+    messages=[
+        {
+            "role": "user",
+            "content": [
                 {
-                    "role": "user",
-                    "content": f"""
+                    "type": "text",
+                    "text": f"""
 You are a marketing performance analyst.
 
 Analyse the campaign metrics below and:
@@ -49,6 +52,6 @@ CPA: £{cpa}
 """
                 }
             ],
-        )
-
-        st.subheader("Diagnosis & Recommendations")
+        }
+    ],
+)
