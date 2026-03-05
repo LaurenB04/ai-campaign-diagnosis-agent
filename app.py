@@ -1,11 +1,10 @@
 import streamlit as st
-import anthropic
 import os
+from anthropic import Anthropic
 
 st.set_page_config(page_title="AI Campaign Diagnosis Agent")
 
 st.title("AI Campaign Performance Diagnosis Agent")
-
 st.write("Enter your campaign metrics below:")
 
 ctr = st.text_input("CTR (%)")
@@ -21,19 +20,15 @@ if st.button("Diagnose Campaign"):
     if not api_key:
         st.error("API key not found.")
     else:
-        client = anthropic.Anthropic(api_key=api_key)
+        client = Anthropic(api_key=api_key)
 
         response = client.messages.create(
-    model="claude-3-5-haiku-latest",
-    max_tokens=500,
-    anthropic_version="2023-06-01",
-    messages=[
-        {
-            "role": "user",
-            "content": [
+            model="claude-3-5-haiku-latest",
+            max_tokens=500,
+            messages=[
                 {
-                    "type": "text",
-                    "text": f"""
+                    "role": "user",
+                    "content": f"""
 You are a marketing performance analyst.
 
 Analyse the campaign metrics below and:
@@ -53,7 +48,7 @@ CPA: £{cpa}
 """
                 }
             ],
-        }
-    ],
-)
+        )
 
+        st.subheader("Diagnosis & Recommendations")
+        st.write(response.content[0].text)
