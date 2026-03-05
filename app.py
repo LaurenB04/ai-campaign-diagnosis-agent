@@ -1,0 +1,48 @@
+import streamlit as st
+import anthropic
+import os
+
+st.set_page_config(page_title="AI Campaign Diagnosis Agent")
+
+st.title("AI Campaign Performance Diagnosis Agent")
+
+st.write("Enter your campaign metrics below:")
+
+ctr = st.text_input("CTR (%)")
+cvr = st.text_input("Conversion Rate (%)")
+bounce = st.text_input("Bounce Rate (%)")
+cpa = st.text_input("CPA (£)")
+target_cpa = st.text_input("Target CPA (£)")
+
+if st.button("Diagnose Campaign"):
+
+    api_key = os.getenv("ANTHROPIC_API_KEY")
+    client = anthropic.Anthropic(api_key=api_key)
+
+    prompt = f"""
+    You are a marketing performance analyst.
+
+    Analyse the campaign metrics below and:
+    1. Identify the primary performance issue.
+    2. Identify any secondary issues.
+    3. Explain your reasoning.
+    4. Recommend 3 specific improvements.
+    5. Provide a confidence level.
+
+    Campaign Goal: Reduce CPA to {target_cpa}
+
+    Metrics:
+    CTR: {ctr}%
+    Conversion Rate: {cvr}%
+    Bounce Rate: {bounce}%
+    CPA: £{cpa}
+    """
+
+    response = client.messages.create(
+        model="claude-3-haiku-20240307",
+        max_tokens=600,
+        messages=[{"role": "user", "content": prompt}]
+    )
+
+    st.subheader("Diagnosis & Recommendations")
+    st.write(response.content[0].text)
