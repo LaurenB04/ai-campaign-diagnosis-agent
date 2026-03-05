@@ -39,10 +39,12 @@ if st.button("Diagnose Campaign"):
     """
 
     response = client.messages.create(
-        model="claude-3-haiku-latest",
-        max_tokens=600,
-        messages=[{"role": "user", "content": prompt}]
-    )
+        response = client.messages.create(
+    model="claude-3-haiku-latest",
+    max_tokens=600,
+    messages=[{"role": "user", "content": prompt}],
+    extra_headers={"anthropic-version": "2023-06-01"}
+)
 
     st.subheader("Diagnosis & Recommendations")
     st.write(response.content[0].text)
