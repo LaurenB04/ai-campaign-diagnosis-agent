@@ -39,7 +39,7 @@ if st.button("Diagnose Campaign"):
     """
 
     response = client.messages.create(
-        model="claude-3-haiku-20240307",
+        model="claude-3-haiku-latest",
         max_tokens=600,
         messages=[{"role": "user", "content": prompt}]
     )
