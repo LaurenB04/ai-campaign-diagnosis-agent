@@ -16,10 +16,20 @@ target_cpa = st.text_input("Target CPA (£)")
 
 if st.button("Diagnose Campaign"):
 
-    api_key = os.getenv("ANTHROPIC_API_KEY")
-    client = anthropic.Anthropic(api_key=api_key)
+    api_key = os.environ.get("ANTHROPIC_API_KEY")
 
-    prompt = f"""
+    if not api_key:
+        st.error("API key not found.")
+    else:
+        client = anthropic.Anthropic(api_key=api_key)
+
+        response = client.messages.create(
+            model="claude-3-5-haiku-latest",
+            max_tokens=500,
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"""
 You are a marketing performance analyst.
 
 Analyse the campaign metrics below and:
@@ -37,14 +47,8 @@ Conversion Rate: {cvr}%
 Bounce Rate: {bounce}%
 CPA: £{cpa}
 """
+                }
+            ],
+        )
 
-    response = client.messages.create(
-        model="claude-3-5-haiku-latest",
-        max_tokens=600,
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-
-    st.subheader("Diagnosis & Recommendations")
-    st.write(response.content[0].text)
+        st.subheader("Diagnosis & Recommendations")
