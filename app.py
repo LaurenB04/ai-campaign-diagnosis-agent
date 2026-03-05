@@ -26,6 +26,7 @@ if st.button("Diagnose Campaign"):
         response = client.messages.create(
     model="claude-3-5-haiku-latest",
     max_tokens=500,
+    anthropic_version="2023-06-01",
     messages=[
         {
             "role": "user",
@@ -55,3 +56,4 @@ CPA: £{cpa}
         }
     ],
 )
+
