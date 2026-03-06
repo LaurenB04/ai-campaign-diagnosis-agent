@@ -23,7 +23,7 @@ if st.button("Diagnose Campaign"):
         client = Anthropic(api_key=api_key)
 
         response = client.messages.create(
-            model="claude-3-5-haiku-latest",
+            model="claude-3-haiku-20240307",
             max_tokens=500,
             messages=[
                 {
